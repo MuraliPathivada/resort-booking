@@ -96,6 +96,8 @@ DATABASES = {
         'PORT': os.getenv("DB_PORT"),
         'OPTIONS': {
             'charset': 'utf8mb4',
+            **({'ssl': {'ssl_mode': 'REQUIRED'}}
+               if os.getenv("DB_SSL") == "True" else {}),
         },
     }
 }
