@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block title %}Book {{ room.name }} - Paradise Resort{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row g-4">
+
+        <!-- Room summary -->
+        <div class="col-md-5">
+            <div class="card shadow-sm">
+                {% if room.images.first %}
+                    <img src="{{ room.images.first.image.url }}" class="card-img-top"
+                         style="height: 250px; object-fit: cover;" alt="{{ room.name }}">
+                {% endif %}
+                <div class="card-body">
+                    <h4>{{ room.name }}</h4>
+                    <p class="text-muted mb-1">{{ room.get_room_type_display }}</p>
+                    <p class="mb-1">Capacity: {{ room.capacity }} guests</p>
+                    <p class="fw-bold">₹{{ room.price_per_night }} / night</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Booking form -->
+        <div class="col-md-7">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h3 class="mb-4">Book Your Stay</h3>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                <div>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <form method="post" id="bookingForm">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label class="form-label">Check-in Date</label>
+                            {{ form.check_in }}
+                            {% if form.check_in.errors %}
+                                <div class="text-danger small">{{ form.check_in.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Check-out Date</label>
+                            {{ form.check_out }}
+                            {% if form.check_out.errors %}
+                                <div class="text-danger small">{{ form.check_out.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Guests (max {{ room.capacity }})</label>
+                            {{ form.guests }}
+                            {% if form.guests.errors %}
+                                <div class="text-danger small">{{ form.guests.errors|striptags }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="alert alert-info">
+                            <strong>Total: ₹<span id="totalPrice">0</span></strong>
+                            <div class="small" id="nightsInfo"></div>
+                        </div>
+
+                        <button type="submit" class="btn btn-dark w-100">Confirm Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const pricePerNight = {{ room.price_per_night }};
+    const checkIn = document.getElementById('id_check_in');
+    const checkOut = document.getElementById('id_check_out');
+    const totalEl = document.getElementById('totalPrice');
+    const nightsEl = document.getElementById('nightsInfo');
+
+    function updateTotal() {
+        if (checkIn.value && checkOut.value) {
+            const d1 = new Date(checkIn.value);
+            const d2 = new Date(checkOut.value);
+            const nights = Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
+            if (nights > 0) {
+                totalEl.textContent = (pricePerNight * nights).toFixed(2);
+                nightsEl.textContent = nights + " night(s) × ₹" + pricePerNight;
+            } else {
+                totalEl.textContent = "0";
+                nightsEl.textContent = "";
+            }
+        }
+    }
+
+    checkIn.addEventListener('change', updateTotal);
+    checkOut.addEventListener('change', updateTotal);
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Write Review - {{ room.name }}{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 600px;">
+    <div class="card shadow-sm">
+        <div class="card-body p-4">
+            <h2>Write a Review</h2>
+            <p class="text-muted">For: <strong>{{ room.name }}</strong></p>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Rating</label>
+                    {{ form.rating }}
+                    {% if form.rating.errors %}
+                        <div class="text-danger small">{{ form.rating.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Comment</label>
+                    {{ form.comment }}
+                    {% if form.comment.errors %}
+                        <div class="text-danger small">{{ form.comment.errors|striptags }}</div>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100">Submit Review</button>
+            </form>
+
+            <a href="{% url 'rooms:room_detail' room.pk %}" class="btn btn-link mt-2">Cancel</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

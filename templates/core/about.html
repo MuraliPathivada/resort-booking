@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}About - Paradise Resort{% endblock %}
+
+{% block content %}
+<div class="container my-5" style="max-width: 800px;">
+    <h1 class="mb-4">About Paradise Resort</h1>
+
+    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200"
+         class="img-fluid rounded mb-4" alt="Resort">
+
+    <p class="lead">
+        Nestled along the pristine coastline, Paradise Resort offers a perfect blend of luxury,
+        comfort, and nature. Since 2010, we've welcomed guests from around the world to experience
+        our world-class hospitality.
+    </p>
+
+    <h3 class="mt-4">Our Mission</h3>
+    <p>To create unforgettable memories for every guest through exceptional service and attention to detail.</p>
+
+    <h3 class="mt-4">Why Choose Us?</h3>
+    <ul>
+        <li>Beachfront property with panoramic ocean views</li>
+        <li>Handcrafted local & international cuisine</li>
+        <li>Infinity pool, spa, and wellness center</li>
+        <li>Personalized concierge service</li>
+        <li>Eco-friendly sustainable practices</li>
+    </ul>
+
+    <a href="{% url 'rooms:room_list' %}" class="btn btn-dark btn-lg mt-3">Explore Our Rooms</a>
+</div>
+{% endblock %}

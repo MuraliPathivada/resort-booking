@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Gallery - Paradise Resort{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <h1 class="mb-4 text-center">Gallery</h1>
+
+    <div class="row g-3">
+        {% for img in images %}
+            <div class="col-md-4 col-sm-6">
+                <div class="card shadow-sm">
+                    <img src="{{ img.image.url }}" class="card-img-top"
+                         style="height: 250px; object-fit: cover;"
+                         alt="{{ img.room.name }}">
+                    <div class="card-body py-2">
+                        <small class="text-muted">{{ img.room.name }}</small>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No images yet.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
